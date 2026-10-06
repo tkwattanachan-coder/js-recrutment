@@ -1,3 +1,4 @@
+index.html — คลิกในกล่อง แล้วกด Ctrl+A ตามด้วย Ctrl+C
 <!doctype html>
 <html lang="th">
 <head>
@@ -1338,7 +1339,7 @@ function pLogin(){const p=P();const pv=p.preVac&&vacOf(p.preVac);
   return `<div style="text-align:center;padding:10px 0 6px"><div class="logo" style="margin:0 auto;width:56px;height:56px;font-size:18px;border-radius:16px">JS</div><h2 style="margin:12px 0 4px;font-size:21px">สมัครงานกับ JS Group</h2><p class="muted" style="margin:0">รปภ. • แม่บ้าน • คนสวน • สำนักงาน<br>พื้นที่ชลบุรี ระยอง และ EEC</p></div>
    ${pv?`<div class="alert info" style="margin:12px 0">กำลังสมัคร: <b>${posN(pv.pos)}</b> • ${esc(siteOf(pv.site).name)}</div>`:''}
    <div class="pc" style="margin-top:14px">${`<label class="lab" for="p-ph">เบอร์มือถือ</label><input class="in pin" id="p-ph" type="tel" inputmode="tel" maxlength="10" placeholder="08xxxxxxxx" value="${esc(p.phone)}" onkeydown="if(event.key==='Enter')A.pSend()"><div class="sm muted" style="margin:6px 0 12px">กรอกเบอร์มือถือเพื่อสมัครงานหรือติดตามสถานะใบสมัคร ไม่ต้องตั้งรหัสผ่าน</div><button class="btn p pbtn" onclick="A.pSend()">เข้าสู่ระบบ</button>`}</div>
-   <div class="pc"><b class="sm">บัญชีทดลอง</b><div class="stack" style="margin-top:6px">${DEMO.map(([ph,t])=>{const c=byPhone(ph);return `<button class="btn" style="text-align:left;justify-content:flex-start;width:100%" onclick="${on(`A.pDemo(${J(ph)})`)}"><span><b style="font-weight:500">${c?esc(fullName(c)):'ผู้สมัครใหม่'}</b> <span class="sm muted">${esc(ph)}</span><br><span class="sm muted">${esc(t)}</span></span></button>`}).join('')}</div></div>`}
+   ${!DEMO.length?'':`<div class="pc"><b class="sm">บัญชีทดลอง</b><div class="stack" style="margin-top:6px">${DEMO.map(([ph,t])=>{const c=byPhone(ph);return `<button class="btn" style="text-align:left;justify-content:flex-start;width:100%" onclick="${on(`A.pDemo(${J(ph)})`)}"><span><b style="font-weight:500">${c?esc(fullName(c)):'ผู้สมัครใหม่'}</b> <span class="sm muted">${esc(ph)}</span><br><span class="sm muted">${esc(t)}</span></span></button>`}).join('')}</div></div>`}`}
 function renderPortal(){const p=P();const c=pc();let body,nav='',head='สมัครงาน JS',sub='สมัครงาน JS Group';
   if(p.screen==='login'||(!c&&!p.form)){body=pLogin()}
   else if(!c){head='สมัครงาน';sub=`ขั้นตอน ${p.step} / 9`;body=wizard()}
@@ -1847,3 +1848,4 @@ boot();
 </script>
 </body>
 </html>
+
