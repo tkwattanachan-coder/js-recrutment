@@ -1188,7 +1188,7 @@ function wizard(){const p=P(),f=p.form,n=p.step;const v=vacOf(f.vac);let body=''
   if(n===7)body=`${ft('ทำงานเป็นกะได้','shift')}${ft('ทำกะกลางคืนได้','night')}${ft('ทำ OT ได้','ot')}${ft('ทำงานวันหยุดได้','holiday')}${ft('เดินทาง/ย้ายหน่วยงานได้','travel')}
     <div class="stack" style="margin-top:12px">${fs('ยานพาหนะ','vehicle',['ไม่มี','จักรยานยนต์','รถยนต์'])}${fs('ที่พัก','accom',['มีที่พักเอง','ต้องการที่พัก'])}${fs('พื้นที่ที่สะดวกทำงาน','pref',AREAS)}${fi('พร้อมเริ่มงานวันที่','start','date',{req:1})}${fi('ค่าจ้างที่คาดหวัง (บาท)','expect','text',{im:'numeric',ph:v?String(v.wage):''})}</div>`;
   if(n===8){const tmp={nat:f.nat};const L=reqDocs(tmp,v?.pos);
-    body=`<p class="muted" style="margin-top:0">ถ่ายรูปหรือแนบไฟล์ได้ทันที (${esc(S.settings.fileTypes)} ไม่เกิน ${S.settings.maxMB} MB) — ยังไม่มีเอกสารก็ส่งใบสมัครก่อนได้ แล้วค่อยส่งเพิ่มภายหลัง</p>${L.map(k=>`<div class="pc" style="padding:12px 14px"><div class="row" style="flex-wrap:nowrap"><div style="flex:1"><b style="font-weight:500">${esc(DOCS[k])}</b><div class="sm ${f.docs[k]?'':'muted'}">${f.docs[k]?'✓ '+esc(f.docs[k]):'ยังไม่แนบ'}</div></div></div><div style="margin-top:8px">${upBtns(k,'pUpF')}</div></div>`).join('')}`}
+    body=`<p class="muted" style="margin-top:0">แนบเอกสารให้ครบทุกรายการก่อนส่งใบสมัคร (${esc(S.settings.fileTypes)} ไม่เกิน ${S.settings.maxMB} MB) ถ่ายจากมือถือได้เลย ระบบจะย่อขนาดไฟล์ให้อัตโนมัติ</p>${L.map(k=>`<div class="pc" style="padding:12px 14px"><div class="row" style="flex-wrap:nowrap"><div style="flex:1"><b style="font-weight:500">${esc(DOCS[k])}</b><div class="sm ${f.docs[k]?'':'muted'}">${f.docs[k]?'✓ '+esc(f.docs[k]):'ยังไม่แนบ'}</div></div></div><div style="margin-top:8px">${upBtns(k,'pUpF')}</div></div>`).join('')}`}
   if(n===9){const r=(l,x)=>`<div class="row" style="padding:6px 0;border-bottom:1px solid var(--line)"><span class="muted sm" style="width:110px">${esc(l)}</span><span style="flex:1">${esc(x||'–')}</span></div>`;const tmp={nat:f.nat};const L=reqDocs(tmp,v?.pos);
     body=`<div class="pc">${r('ตำแหน่ง',v?`${posN(v.pos)} • ${siteOf(v.site).name}`:'')}${r('ชื่อ',`${f.first} ${f.last}${f.nick?` (${f.nick})`:''}`)}${r(f.nat==='ไทย'?'เลขบัตร':'หนังสือเดินทาง',pMask(f.cid||f.passport))}${r('วันเกิด',f.dob?fD(f.dob):'')}${r('เบอร์โทร',f.phone)}${r('ที่อยู่',`${f.addr.no} ${f.addr.sub} ${f.addr.dist} ${f.addr.prov}`)}${r('การศึกษา',f.edu.map(e=>e.level).join(', '))}${r('ประสบการณ์',f.exp.length?f.exp.map(e=>e.pos||e.co).join(', '):'ไม่มี')}${r('ทักษะ',f.skills.join(', '))}${r('เริ่มงานได้',fD(f.start))}${r('เอกสาร',`แนบแล้ว ${L.filter(k=>f.docs[k]).length} / ${L.length}`)}</div>
     <div class="row" style="gap:6px">${[2,3,7,8].map(s=>`<button class="btn s" onclick="A.pGo(${s})">แก้ไข${STEPS[s-1].split('และ')[0]}</button>`).join('')}</div>
@@ -1309,7 +1309,7 @@ function pInterview(c){const a=cur(c),p=P();const b=bookingOf(a);
     ui.pend.push(['qr-bk',`JS-INT|${b.id}|${c.id}`]);
     return `<h2 style="margin:0 0 12px">นัดสัมภาษณ์ของคุณ</h2><div class="pc"><div class="sm muted">เลขที่นัด ${b.id}</div><div style="font-size:18px;font-weight:600;margin-top:4px">${fDay(sl.date)}</div><div>${sl.start}–${sl.et} น. • ${esc(sl.type)}</div><div class="sm">${esc(sl.loc)} • <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(sl.loc)}" target="_blank" rel="noopener">แผนที่</a></div><div class="sm">ติดต่อ ${esc(sl.coord)} <a href="tel:${esc(sl.phone)}">${esc(sl.phone)}</a></div>
       <div style="text-align:center;margin-top:12px">${['arrived','late'].includes(b.att)?`<div class="alert ok">เช็คอินแล้ว ${fDT(b.checkin)} — กรุณารอเรียกคิว</div>`:`<div class="qr" id="qr-bk"></div><div class="sm muted" style="margin-top:6px">แสดง QR นี้ หรือสแกน QR ที่จุดรับสมัครเมื่อมาถึง</div>`}</div></div>
-      ${['arrived','late'].includes(b.att)?'':`<button class="btn p pbtn" onclick="${on(`A.pCheckin(${J(b.id)})`)}">สแกน QR เช็คอิน (จำลอง)</button>`}
+      ${(LIVE||['arrived','late'].includes(b.att))?'':`<button class="btn p pbtn" onclick="${on(`A.pCheckin(${J(b.id)})`)}">สแกน QR เช็คอิน (จำลอง)</button>`}
       ${['arrived','late'].includes(b.att)?'':canR?`<button class="btn pbtn" style="margin-top:8px" onclick="${on(`A.pResched(${J(b.id)})`)}">ขอเปลี่ยนวันสัมภาษณ์</button>`:`<p class="sm muted" style="text-align:center">เปลี่ยนวันได้ก่อนนัดอย่างน้อย ${S.settings.reschedHrs} ชม. (สูงสุด ${S.settings.maxResched} ครั้ง) หากมีเหตุจำเป็นโปรดโทร <a href="tel:${esc(sl.phone)}">${esc(sl.phone)}</a></p>`}`}
   const H=S.bookings.filter(x=>x.cand===c.id);
   return `<h2 style="margin:0 0 12px">การสัมภาษณ์</h2><div class="pc"><p style="margin:0">${a.status==='pendingres'?'สัมภาษณ์เรียบร้อยแล้ว กรุณารอผลในแอปนี้':['new','review','docpending'].includes(a.status)?'เมื่อใบสมัครผ่านการตรวจสอบ เมนูนี้จะเปิดให้เลือกวันสัมภาษณ์เอง':'ขณะนี้ไม่มีนัดสัมภาษณ์ที่ต้องดำเนินการ'}</p></div>
@@ -1511,6 +1511,17 @@ function portalState(d) {
   S.bookings = d.bookings || [];
   S.cands = d.cand ? [d.cand] : [];
   S.documents = d.documents || [];
+  if (d.cand) {
+    const MAPD = { 'รอตรวจ': 'submitted', 'กำลังตรวจ': 'review', 'อนุมัติ': 'approved',
+                   'ไม่อนุมัติ': 'rejected', 'ต้องแก้ไข': 'correction', 'ไม่ต้องใช้': 'na' };
+    d.cand.docs = d.cand.docs || {};
+    (d.documents || []).forEach(x => {
+      const cur = d.cand.docs[x.type];
+      if (!cur || (x.at || '') >= (cur.at || '')) {
+        d.cand.docs[x.type] = { st: MAPD[x.st] || 'submitted', at: x.at, note: x.note || '' };
+      }
+    });
+  }
   if (d.settings && Object.keys(d.settings).length) S.settings = Object.assign({}, S.settings, d.settings);
   applyMaster(S, d.master || []);
   p.cand = d.cand ? d.cand.id : null;
@@ -1547,15 +1558,40 @@ wrapAp('pDraft', async () => {
   catch (e) { toast(e.message, 'bad'); }
 });
 
+/* เอกสารที่แนบระหว่างกรอกใบสมัคร เก็บไว้ก่อน แล้วส่งขึ้นจริงหลังส่งใบสมัคร */
+const DOCQ = {};
+
 wrapAp('pSubmit', async (orig) => {
-  const p = P();
+  const p = P(), f = p.form;
   for (let i = 1; i <= 9; i++) { const e = vStep(i); if (e) { p.step = i; render(); toast(e, 'bad'); return; } }
+  let need = [];
   try {
-    const r = await api('ap.apply', { form: p.form }, NET.tokenAp);
+    const v = vacOf(f.vac);
+    need = reqDocs({ nat: f.nat }, v && v.pos).filter(k => !DOCQ[k] && !f.docs[k]);
+  } catch (e) { need = []; }
+  if (need.length) {
+    p.step = 8; render();
+    toast('กรุณาแนบเอกสารให้ครบก่อนส่งใบสมัคร: ' + need.map(k => DOCS[k] || k).join(', '), 'bad');
+    return;
+  }
+  try {
+    toast('กำลังส่งใบสมัคร…');
+    const r = await api('ap.apply', { form: f }, NET.tokenAp);
+    const keys = Object.keys(DOCQ);
+    let sent = 0, failed = [];
+    for (let i = 0; i < keys.length; i++) {
+      const k = keys[i];
+      try { await api('ap.upload', { type: k, base64: DOCQ[k].base64, mime: DOCQ[k].mime }, NET.tokenAp); sent++; }
+      catch (e) { failed.push(DOCS[k] || k); }
+      delete DOCQ[k];
+    }
     await apRefresh();
     p.form = null; p.step = 1; p.tab = 'home'; p.done = r.appNo;
     render();
-    toast('ส่งใบสมัครเรียบร้อย เลขที่ ' + r.appNo, 'ok');
+    toast(failed.length
+      ? 'ส่งใบสมัครแล้ว แต่ส่งเอกสารไม่สำเร็จ ' + failed.join(', ') + ' กรุณาส่งใหม่ที่แท็บเอกสาร'
+      : 'ส่งใบสมัครเรียบร้อย เลขที่ ' + r.appNo + (sent ? ' พร้อมเอกสาร ' + sent + ' รายการ' : ''),
+      failed.length ? 'bad' : 'ok');
   } catch (e) { toast(e.message, 'bad'); }
 });
 
@@ -1824,6 +1860,34 @@ wrapAp('pDoSign', async (orig, code) => {
 
 wrapAp('pOut', (orig) => { NET.tokenAp = null; return orig(); });
 
+/* แนบเอกสารระหว่างกรอกใบสมัคร — ย่อรูปและเก็บไว้ ส่งขึ้นจริงตอนกดส่งใบสมัคร */
+wrapAp('pUpF', async (orig, k, inp) => {
+  const f = inp && inp.files && inp.files[0]; if (!f) return;
+  const err = (typeof fileOk === 'function') ? fileOk(f) : '';
+  if (err) { toast(err, 'bad'); inp.value = ''; return; }
+  try {
+    const r = await shrink(f);
+    DOCQ[k] = { base64: r.base64, mime: r.mime };
+    P().form.docs[k] = f.name;
+    inp.value = ''; render();
+    toast('แนบ' + (DOCS[k] || 'ไฟล์') + 'แล้ว', 'ok');
+  } catch (e) { toast('แนบไฟล์ไม่สำเร็จ', 'bad'); }
+});
+
+wrapAp('pPhoto', async (orig, inp) => {
+  const f = inp && inp.files && inp.files[0]; if (!f) return;
+  const err = (typeof fileOk === 'function') ? fileOk(f) : '';
+  if (err) { toast(err, 'bad'); return; }
+  try {
+    const r = await shrink(f);
+    DOCQ['photo'] = { base64: r.base64, mime: r.mime };
+    P().form.photo = f.name;
+    P().form.docs['photo'] = f.name;
+    render();
+    toast('แนบรูปถ่ายแล้ว', 'ok');
+  } catch (e) { toast('แนบไฟล์ไม่สำเร็จ', 'bad'); }
+});
+
 /* หน้าจัดการผู้ใช้งาน */
 NAV.forEach(g=>{if(g[0]==='ตั้งค่าระบบ'){g[1]=g[1].filter(x=>x[0]!=='users');g[1].unshift(['users','ผู้ใช้งานระบบ'])}});
 TITLES.users='ผู้ใช้งานระบบ';V.users=vUsers;
@@ -1847,4 +1911,3 @@ boot();
 </script>
 </body>
 </html>
-
